@@ -6,6 +6,8 @@ data: 2020-04-28
 """
 
 import os
+from typing import List
+
 import matplotlib.figure
 
 
@@ -23,7 +25,7 @@ class Graph:
         self.ax = ax
         self.loss = loss
 
-    def create(self, train: float, validation: float) -> None:
+    def create(self, train: List[float], validation: List[float]) -> None:
         """
         creates the accuracy or validation graph in the axis object.
         :param train: training data (accuracy or loss).
