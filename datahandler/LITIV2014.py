@@ -7,7 +7,7 @@ date: 2020-04-27
 
 import os
 from collections import defaultdict
-from typing import List
+from typing import DefaultDict, List
 
 import utils.misc as misc
 from datahandler.dataset import Dataset
@@ -24,19 +24,19 @@ class LITIV2014(Dataset):
         :param width: image width.
         :param fold: number identifying which fold to keep as testing data.
         """
-        super(LITIV2014, self).__init__(root, psize, height, width, Datasets.litiv2014, fold)
+        super(LITIV2014, self).__init__(root, psize, height, width, Datasets.LITIV2014, fold)
 
         rgb, lwir, mrgb, mlwir, disparity, drange = self._prepare()
         mirrored = self._mirror(rgb, lwir, mrgb, mlwir, disparity, drange)
         self._add_points(rgb, lwir, mrgb, mlwir, disparity, drange, mirrored)
 
-    def _prepare(self) -> (defaultdict[str, List[str]], defaultdict[str, List[str]], defaultdict[str, List[str]],
-                           defaultdict[str, List[str]], defaultdict[str, List[str]], defaultdict[str, List[str]]):
+    def _prepare(self) -> (DefaultDict[str, List[str]], DefaultDict[str, List[str]], DefaultDict[str, List[str]],
+                           DefaultDict[str, List[str]], DefaultDict[str, List[str]], DefaultDict[str, List[str]]):
         """
         aggregates all images and disparity files from the original LITIV 2014 folder.
         :return: void.
         """
-        print(f'preparing LITIV 2014 dataset...')
+        print(f'preparing LITIV2014 dataset...')
         rgb_paths = defaultdict(list)
         lwir_paths = defaultdict(list)
         mask_rgb_paths = defaultdict(list)

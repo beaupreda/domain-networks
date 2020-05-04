@@ -27,8 +27,8 @@ class TrainLITIVDataset:
         """
         self.rgb = rgb
         self.lwir = lwir
-        self.bsize = args.bsize
-        self.psize = args.psize
+        self.bsize = args.batch_size
+        self.psize = args.patch_size
         self.channels = 3
         self.ptr = 0
         tmp_disparity = io.read_disparity_gt(disparity)
@@ -87,17 +87,17 @@ class TestLITIVDataset:
         """
         self.rgb = rgb
         self.lwir = lwir
-        self.bsize = args.bsize
-        self.psize = args.psize
-        self.hdisp = args.half_disparity
+        self.bsize = args.batch_size
+        self.psize = args.patch_size
+        self.hdisp = float(args.max_disparity) / 2.0
         self.channels = 3
         self.ptr = 0
         self.disparity = io.read_disparity_gt(disparity)
 
         print(f'total testing locations: {self.disparity.shape[0]}')
 
-        patch_size = 2 * self.psize + 1
-        range_size = 2 * self.hdisp + patch_size
+        patch_size = int(2 * self.psize + 1)
+        range_size = int(2 * self.hdisp + patch_size)
         self.patch_rgb = torch.zeros(size=(self.bsize, self.channels, patch_size, patch_size), dtype=torch.float32)
         self.patch_lwir = torch.zeros(size=(self.bsize, self.channels, patch_size, range_size), dtype=torch.float32)
         self.targets = torch.zeros(size=(self.bsize, ), dtype=torch.int64)

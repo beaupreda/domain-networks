@@ -8,7 +8,7 @@ date: 2020-04-22
 import glob
 import os
 from collections import defaultdict
-from typing import Dict, List
+from typing import Dict, DefaultDict, List
 
 import cv2
 import numpy as np
@@ -61,11 +61,11 @@ class Dataset:
         """
         pass
 
-    def _reform(self, rgb: defaultdict[str, List[str]], lwir: defaultdict[str, List[str]],
-                mrgb: defaultdict[str, List[str]], mlwir: defaultdict[str, List[str]],
-                disparity: defaultdict[str, List[str]], drange: defaultdict[str, List[str]]) -> \
-            (defaultdict[str, List[str]], defaultdict[str, List[str]], defaultdict[str, List[str]],
-             defaultdict[str, List[str]], defaultdict[str, List[str]], defaultdict[str, List[str]]):
+    def _reform(self, rgb: DefaultDict[str, List[str]], lwir: DefaultDict[str, List[str]],
+                mrgb: DefaultDict[str, List[str]], mlwir: DefaultDict[str, List[str]],
+                disparity: DefaultDict[str, List[str]], drange: DefaultDict[str, List[str]]) -> \
+            (DefaultDict[str, List[str]], DefaultDict[str, List[str]], DefaultDict[str, List[str]],
+             DefaultDict[str, List[str]], DefaultDict[str, List[str]], DefaultDict[str, List[str]]):
         """
         creates two new folders so both datasets have the same structure, which will facilitates the merging later on.
         :param rgb: dict(str, list) of paths to original rgb images.
@@ -154,7 +154,7 @@ class Dataset:
                 masks_lwir[video].append(io.copy_image(ml, os.path.join(lwir_masks_root, f'{i}.{ml[-3:]}')))
                 if d not in visited:
                     j, new_disparity = io.unify_ground_truth(d, disparity_root, i, self.dataset, idx)
-                    if self.dataset == Datasets.litiv2014:
+                    if self.dataset == Datasets.LITIV2014:
                         disparity_files[video].extend(new_disparity)
                     else:
                         disparity_files[video].append(new_disparity)
@@ -164,9 +164,9 @@ class Dataset:
 
         return rgb_images, lwir_images, masks_rgb, masks_lwir, disparity_files, drange_files
 
-    def _mirror(self, rgb: defaultdict[str, List[str]], lwir: defaultdict[str, List[str]],
-                mrgb: defaultdict[str, List[str]], mlwir: defaultdict[str, List[str]],
-                disparity: defaultdict[str, List[str]], drange: defaultdict[str, List[str]]) -> Dict[str, int]:
+    def _mirror(self, rgb: DefaultDict[str, List[str]], lwir: DefaultDict[str, List[str]],
+                mrgb: DefaultDict[str, List[str]], mlwir: DefaultDict[str, List[str]],
+                disparity: DefaultDict[str, List[str]], drange: DefaultDict[str, List[str]]) -> Dict[str, int]:
         """
         duplicates every image with a left right flip to augment the dataset.
         :param rgb: dict(str, list) of paths to reformed rgb images.
@@ -232,9 +232,9 @@ class Dataset:
 
         return mirrored
 
-    def _add_points(self, rgb: defaultdict[str, List[str]], lwir: defaultdict[str, List[str]],
-                    mrgb: defaultdict[str, List[str]], mlwir: defaultdict[str, List[str]],
-                    disparity: defaultdict[str, List[str]], drange: defaultdict[str, List[str]],
+    def _add_points(self, rgb: DefaultDict[str, List[str]], lwir: DefaultDict[str, List[str]],
+                    mrgb: DefaultDict[str, List[str]], mlwir: DefaultDict[str, List[str]],
+                    disparity: DefaultDict[str, List[str]], drange: DefaultDict[str, List[str]],
                     mirrored: Dict[str, int]) -> None:
         """
         add data points below (x, y - 1) and above (x, y + 1) for all know ground-truth disparities (x, y)

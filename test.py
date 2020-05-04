@@ -108,7 +108,7 @@ def main() -> None:
     parser.add_argument('--fold', type=int, default=3, help='which fold to test on (LITIV dataset only)')
     parser.add_argument('--model', default='domain', help='name of the model to train')
     parser.add_argument('--datapath', default='/home/beaupreda/litiv/datasets/litiv')
-    parser.add_argument('--loadmodel', default='logs/20200313-055528/parameters/params200.pt',
+    parser.add_argument('--loadmodel', default='pretrained/corrnet/fold1.pt',
                         help='name of the model to load, if any')
     parser.add_argument('--max_disparity', type=int, default=64, help='maximum disparity in the dataset')
     parser.add_argument('--patch_size', type=int, default=18, help='half width of the left patch')

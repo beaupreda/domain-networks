@@ -7,7 +7,7 @@ date: 2020-04-28
 
 import os
 from collections import defaultdict
-from typing import List
+from typing import List, Tuple, DefaultDict
 
 import cv2
 import numpy as np
@@ -70,7 +70,7 @@ def read_drange(filename: str) -> (int, int):
     return int(line[0]), int(line[1])
 
 
-def read_disparity(filename: str, i: int) -> List[(int, int, int, int)]:
+def read_disparity(filename: str, i: int) -> List[Tuple[int, int, int, int]]:
     """
     reads content of disparity file.
     :param filename: name of GT file.
@@ -100,7 +100,7 @@ def read_disparity_file(filename: str, drange: str, i: int, m: int, width: int, 
     :return: data points in the corrected range.
     """
     points = []
-    if dataset == Datasets.litiv2014:
+    if dataset == Datasets.LITIV2014:
         high = 0
     else:
         _, high = read_drange(drange)
@@ -110,7 +110,7 @@ def read_disparity_file(filename: str, drange: str, i: int, m: int, width: int, 
             x = int(line[0])
             y = int(line[1])
             d = int(line[2])
-            if dataset == Datasets.litiv2014:
+            if dataset == Datasets.LITIV2014:
                 dx = x
                 x = x - abs(d)
                 if i >= m:
@@ -144,14 +144,14 @@ def read_disparity_gt(filename: str) -> np.ndarray:
 
 
 def read_ground_truth_disparities(filename: str, dataset: Datasets) -> \
-        defaultdict[int, List[(int, int, int)]] or List[(int, int, int)]:
+        DefaultDict[int, List[Tuple[int, int, int]]] or List[Tuple[int, int, int]]:
     """
     reads the original ground-truth files of LITIV 2014 and 2018 datasets.
     :param filename: name of ground-truth file.
     :param dataset: which LITIV dataset.
     :return: data points for each frame.
     """
-    if dataset == Datasets.litiv2014:
+    if dataset == Datasets.LITIV2014:
         points = defaultdict(list)
         with open(filename, 'r') as file:
             while True:
@@ -166,7 +166,7 @@ def read_ground_truth_disparities(filename: str, dataset: Datasets) -> \
                 else:
                     break
             return points
-    elif dataset == Datasets.litiv2018:
+    elif dataset == Datasets.LITIV2018:
         points = []
         with open(filename, 'r') as file:
             # # ignore first line (%YAML:1.0)
@@ -183,8 +183,8 @@ def read_ground_truth_disparities(filename: str, dataset: Datasets) -> \
 
 
 def write_ground_truth_disparities(disparity_root: str,
-                                   points: defaultdict[int, List[(int, int, int)]] or List[(int, int, int)],
-                                   i: int, dataset: Datasets, idx: int) -> (int, List[str]) or (int, str):
+                                   points: DefaultDict[int, List[Tuple[int, int, int]]] or List[Tuple[int, int, int]],
+                                   i: int, dataset: Datasets, idx: int) -> (int, List[str]) or Tuple[int, str]:
     """
     writes ground-truth data in a uniformed manner for both datasets.
     :param disparity_root: path to disparity folder.
@@ -194,7 +194,7 @@ def write_ground_truth_disparities(disparity_root: str,
     :param idx: offset for LITIV 2014.
     :return: offset and filename(s).
     """
-    if dataset == Datasets.litiv2014:
+    if dataset == Datasets.LITIV2014:
         filenames = []
         for i, frame in enumerate(points.keys()):
             filename = os.path.join(disparity_root, f'{idx + i}.txt')
@@ -203,7 +203,7 @@ def write_ground_truth_disparities(disparity_root: str,
                     file.write(f'{x} {y} {d}\n')
                 filenames.append(filename)
         return len(points), filenames
-    elif dataset == Datasets.litiv2018:
+    elif dataset == Datasets.LITIV2018:
         filename = os.path.join(disparity_root, f'{i}.txt')
         with open(filename, 'w') as file:
             for x, y, d in points:

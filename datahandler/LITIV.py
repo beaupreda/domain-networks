@@ -9,7 +9,7 @@ import glob
 import os
 import random
 from collections import defaultdict
-from typing import List
+from typing import DefaultDict, List
 
 import utils.io as io
 from datahandler.LITIV2014 import LITIV2014
@@ -62,7 +62,7 @@ class LITIV:
                 file.write(f'{i} {x} {y} {dx}\n')
         return gt
 
-    def _make_images(self, root: str, data: defaultdict[str, List[str]], split: str) -> List[str]:
+    def _make_images(self, root: str, data: DefaultDict[str, List[str]], split: str) -> List[str]:
         """
         creates rgb/lwir images folders and copy images for each split.
         :param root: locations of the rgb/lwir folders.
