@@ -43,7 +43,7 @@ class TrainLITIVDataset:
 
         print(f'total {phase} locations: {self.disparity.shape[0]}')
 
-        patch_size = 2 * self.psize + 1
+        patch_size = 2 * self.psize
         self.patch_rgb = torch.zeros(size=(self.bsize, self.channels, patch_size, patch_size), dtype=torch.float32)
         self.patch_lwir = torch.zeros(size=(self.bsize, self.channels, patch_size, patch_size), dtype=torch.float32)
         self.targets = torch.zeros(size=(self.bsize, ), dtype=torch.int64)
@@ -66,10 +66,10 @@ class TrainLITIVDataset:
             rgb = torch.from_numpy(misc.preprocess(rgb, True))
             lwir = torch.from_numpy(misc.preprocess(lwir, True))
 
-            self.patch_rgb[idx] = rgb[:, y - self.psize:y + self.psize + 1,
-                                      x - self.psize:x + self.psize + 1]
-            self.patch_lwir[idx] = lwir[:, y - self.psize:y + self.psize + 1,
-                                        dx - self.psize:dx + self.psize + 1]
+            self.patch_rgb[idx] = rgb[:, y - self.psize:y + self.psize,
+                                      x - self.psize:x + self.psize]
+            self.patch_lwir[idx] = lwir[:, y - self.psize:y + self.psize,
+                                        dx - self.psize:dx + self.psize]
             self.targets[idx] = torch.tensor(data=label, dtype=torch.int64)
 
         self.ptr += self.bsize
@@ -89,15 +89,15 @@ class TestLITIVDataset:
         self.lwir = lwir
         self.bsize = args.batch_size
         self.psize = args.patch_size
-        self.hdisp = float(args.max_disparity) / 2.0
+        self.hdisp = int(float(args.max_disparity) / 2.0)
         self.channels = 3
         self.ptr = 0
         self.disparity = io.read_disparity_gt(disparity)
 
         print(f'total testing locations: {self.disparity.shape[0]}')
 
-        patch_size = int(2 * self.psize + 1)
-        range_size = int(2 * self.hdisp + patch_size)
+        patch_size = 2 * self.psize
+        range_size = 2 * self.hdisp + patch_size
         self.patch_rgb = torch.zeros(size=(self.bsize, self.channels, patch_size, patch_size), dtype=torch.float32)
         self.patch_lwir = torch.zeros(size=(self.bsize, self.channels, patch_size, range_size), dtype=torch.float32)
         self.targets = torch.zeros(size=(self.bsize, ), dtype=torch.int64)
@@ -120,8 +120,8 @@ class TestLITIVDataset:
             rgb = torch.from_numpy(misc.preprocess(rgb, True))
             lwir = torch.from_numpy(misc.preprocess(lwir, True))
 
-            self.patch_rgb[idx] = rgb[:, y - self.psize:y + self.psize + 1,
-                                      x - self.psize:x + self.psize + 1]
+            self.patch_rgb[idx] = rgb[:, y - self.psize:y + self.psize,
+                                      x - self.psize:x + self.psize]
             self.patch_lwir[idx] = lwir[:, y - self.psize:y + self.psize,
                                         dx - self.psize - self.hdisp:dx + self.psize + self.hdisp]
             self.targets[idx] = torch.tensor(data=self.hdisp, dtype=torch.int64)

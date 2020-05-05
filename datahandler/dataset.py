@@ -31,6 +31,7 @@ class Dataset:
         """
         self.root = root
         self.psize = psize
+        self.hrange = 60
         self.height = height
         self.width = width
         self.dataset = dataset
@@ -248,8 +249,8 @@ class Dataset:
         :return: void.
         """
         print(f'adding training points...')
-        left = self.psize + self.psize
-        right = self.width - (self.psize + self.psize + 1)
+        left = self.psize + self.hrange
+        right = self.width - (self.psize + self.hrange + 1)
         top = self.psize
         bottom = self.height - (self.psize + 1)
 

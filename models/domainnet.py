@@ -22,7 +22,7 @@ class DomainNet(nn.Module):
         super(DomainNet, self).__init__()
         self.rgb_features = Features(num_channels=num_channels)
         self.lwir_features = Features(num_channels=num_channels)
-        self.corr_cls = Classifier(num_channels=256)
+        self.correlation_cls = Classifier(num_channels=256)
         self.concat_cls = Classifier(num_channels=512)
 
     def forward(self, rgb: torch.Tensor, lwir: torch.Tensor) -> (torch.Tensor, torch.Tensor):
@@ -41,7 +41,7 @@ class DomainNet(nn.Module):
         correlation = correlation.view(correlation.size(0), -1)
         concatenation = concatenation.view(concatenation.size(0), -1)
 
-        correlation = self.corr_cls(correlation)
+        correlation = self.correlation_cls(correlation)
         concatenation = self.concat_cls(concatenation)
 
         return correlation, concatenation

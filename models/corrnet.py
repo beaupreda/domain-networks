@@ -21,7 +21,7 @@ class CorrNet(nn.Module):
         super(CorrNet, self).__init__()
         self.rgb_features = Features(num_channels=num_channels)
         self.lwir_features = Features(num_channels=num_channels)
-        self.corr_cls = Classifier(num_channels=256)
+        self.correlation_cls = Classifier(num_channels=256)
 
     def forward(self, rgb: torch.Tensor, lwir: torch.Tensor) -> torch.Tensor:
         """
@@ -35,6 +35,6 @@ class CorrNet(nn.Module):
 
         correlation = torch.matmul(rgb, lwir)
         correlation = correlation.view(correlation.size(0), -1)
-        correlation = self.corr_cls(correlation)
+        correlation = self.correlation_cls(correlation)
 
         return correlation

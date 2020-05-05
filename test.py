@@ -41,10 +41,10 @@ def test(model: torch.nn.Module, loader: TestLITIVDataset, name: str, max_disp: 
             print(f'\r{i + bsize} / {loader.disparity.shape[0]}', end='', flush=True)
             rgb, lwir, targets = loader.get_batch()
 
-            disp = torch.arange(start=0, end=max_disp, dtype=torch.float32)
-            disp = disp.repeat(repeats=(bsize, )).reshape(bsize, max_disp)
-            weight_corr = torch.zeros(size=(bsize, max_disp), dtype=torch.float32)
-            weight_concat = torch.zeros(size=(bsize, max_disp), dtype=torch.float32)
+            disp = torch.arange(start=0, end=(max_disp + 1), dtype=torch.float32)
+            disp = disp.repeat(repeats=(bsize, )).reshape(bsize, max_disp + 1)
+            weight_corr = torch.zeros(size=(bsize, max_disp + 1), dtype=torch.float32)
+            weight_concat = torch.zeros(size=(bsize, max_disp + 1), dtype=torch.float32)
             if cuda:
                 rgb = rgb.cuda()
                 lwir = lwir.cuda()
@@ -63,7 +63,7 @@ def test(model: torch.nn.Module, loader: TestLITIVDataset, name: str, max_disp: 
                 if name == 'corrnet':
                     correlation = torch.matmul(frgb, lw)
                     correlation = correlation.view(correlation.size(0), -1)
-                    corr = torch.softmax(model.corr_cls(correlation), dim=1)
+                    corr = torch.softmax(model.correlation_cls(correlation), dim=1)
                     weight_corr[:, d] = corr[:, 1]
                 elif name == 'concatnet':
                     concatenation = torch.cat((F.relu(frgb), F.relu(lw)), dim=1)
@@ -75,7 +75,7 @@ def test(model: torch.nn.Module, loader: TestLITIVDataset, name: str, max_disp: 
                     concatenation = torch.cat((F.relu(frgb), F.relu(lw)), dim=1)
                     correlation = correlation.view(correlation.size(0), -1)
                     concatenation = concatenation.view(concatenation.size(0), -1)
-                    corr = torch.softmax(model.corr_cls(correlation), dim=1)
+                    corr = torch.softmax(model.correlation_cls(correlation), dim=1)
                     concat = torch.softmax(model.concat_cls(concatenation), dim=1)
                     weight_corr[:, d] = corr[:, 1]
                     weight_concat[:, d] = concat[:, 1]
@@ -105,15 +105,15 @@ def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--save', default='logs', help='folder to save logs from executions')
-    parser.add_argument('--fold', type=int, default=3, help='which fold to test on (LITIV dataset only)')
-    parser.add_argument('--model', default='domain', help='name of the model to train')
+    parser.add_argument('--fold', type=int, default=1, help='which fold to test on (LITIV dataset only)')
+    parser.add_argument('--model', default='concatnet', help='name of the model to train')
     parser.add_argument('--datapath', default='/home/beaupreda/litiv/datasets/litiv')
-    parser.add_argument('--loadmodel', default='pretrained/corrnet/fold1.pt',
+    parser.add_argument('--loadmodel', default='pretrained/concatnet/fold1.pt',
                         help='name of the model to load, if any')
     parser.add_argument('--max_disparity', type=int, default=64, help='maximum disparity in the dataset')
     parser.add_argument('--patch_size', type=int, default=18, help='half width of the left patch')
     parser.add_argument('--batch_size', type=int, default=100, help='test batch size')
-    parser.add_argument('--n', type=int, default=5, help='threshold for the n pixel error function')
+    parser.add_argument('--n', type=int, default=3, help='threshold for the n pixel error function')
     parser.add_argument('--no_cuda', action='store_true', default=False, help='enables/disables GPU')
     args = parser.parse_args()
 
@@ -142,7 +142,7 @@ def main() -> None:
         criterion.cuda()
 
     accuracy = test(model, dataloader, args.model, args.max_disparity, args.batch_size, args.n, args.cuda)
-    print(f'test accuracy: {accuracy * 100:.2f}')
+    print(f'\ntest accuracy: {accuracy * 100:.2f}')
 
     print('Fin.')
 

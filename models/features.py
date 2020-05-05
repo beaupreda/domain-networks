@@ -26,7 +26,7 @@ class Features(nn.Module):
         self.conv6 = blk.Conv2dBNReLU(in_dim=128, out_dim=128, ksize=(5, 5))
         self.conv7 = blk.Conv2dBNReLU(in_dim=128, out_dim=256, ksize=(5, 5))
         self.conv8 = blk.Conv2dBNReLU(in_dim=256, out_dim=256, ksize=(5, 5))
-        self.conv9 = blk.Conv2dBN(in_dim=256, out_dim=256, ksize=(5, 5))
+        self.conv9 = blk.Conv2dBN(in_dim=256, out_dim=256, ksize=(4, 4))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
