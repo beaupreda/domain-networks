@@ -131,22 +131,6 @@ class LITIV:
                 train_data['disparity'].extend(self.litiv2018.disparity[video])
 
             if self.litiv2014.fold == 1:
-                test_data['rgb'].extend(self.litiv2014.rgb['vid3'])
-                test_data['lwir'].extend(self.litiv2014.lwir['vid3'])
-                test_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid3'])
-                test_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid3'])
-                test_data['disparity'].extend(self.litiv2014.disparity['vid3'])
-                val_data['rgb'].extend(self.litiv2014.rgb['vid1'])
-                val_data['lwir'].extend(self.litiv2014.lwir['vid1'])
-                val_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid1'])
-                val_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid1'])
-                val_data['disparity'].extend(self.litiv2014.disparity['vid1'])
-                val_data['rgb'].extend(self.litiv2014.rgb['vid2'])
-                val_data['lwir'].extend(self.litiv2014.lwir['vid2'])
-                val_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid2'])
-                val_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid2'])
-                val_data['disparity'].extend(self.litiv2014.disparity['vid2'])
-            elif self.litiv2014.fold == 2:
                 test_data['rgb'].extend(self.litiv2014.rgb['vid1'])
                 test_data['lwir'].extend(self.litiv2014.lwir['vid1'])
                 test_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid1'])
@@ -162,7 +146,7 @@ class LITIV:
                 val_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid3'])
                 val_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid3'])
                 val_data['disparity'].extend(self.litiv2014.disparity['vid3'])
-            elif self.litiv2014.fold == 3:
+            elif self.litiv2014.fold == 2:
                 test_data['rgb'].extend(self.litiv2014.rgb['vid2'])
                 test_data['lwir'].extend(self.litiv2014.lwir['vid2'])
                 test_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid2'])
@@ -178,6 +162,22 @@ class LITIV:
                 val_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid3'])
                 val_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid3'])
                 val_data['disparity'].extend(self.litiv2014.disparity['vid3'])
+            elif self.litiv2014.fold == 3:
+                test_data['rgb'].extend(self.litiv2014.rgb['vid3'])
+                test_data['lwir'].extend(self.litiv2014.lwir['vid3'])
+                test_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid3'])
+                test_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid3'])
+                test_data['disparity'].extend(self.litiv2014.disparity['vid3'])
+                val_data['rgb'].extend(self.litiv2014.rgb['vid1'])
+                val_data['lwir'].extend(self.litiv2014.lwir['vid1'])
+                val_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid1'])
+                val_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid1'])
+                val_data['disparity'].extend(self.litiv2014.disparity['vid1'])
+                val_data['rgb'].extend(self.litiv2014.rgb['vid2'])
+                val_data['lwir'].extend(self.litiv2014.lwir['vid2'])
+                val_data['mask_rgb'].extend(self.litiv2014.mask_rgb['vid2'])
+                val_data['mask_lwir'].extend(self.litiv2014.mask_lwir['vid2'])
+                val_data['disparity'].extend(self.litiv2014.disparity['vid2'])
         elif self.litiv2018.fold == 4 or self.litiv2018.fold == 5 or self.litiv2018.fold == 6:
             for video in self.litiv2014.rgb.keys():
                 train_data['rgb'].extend(self.litiv2014.rgb[video])
@@ -187,22 +187,6 @@ class LITIV:
                 train_data['disparity'].extend(self.litiv2014.disparity[video])
 
             if self.litiv2018.fold == 4:
-                test_data['rgb'].extend(self.litiv2018.rgb['vid08'])
-                test_data['lwir'].extend(self.litiv2018.lwir['vid08'])
-                test_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid08'])
-                test_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid08'])
-                test_data['disparity'].extend(self.litiv2018.disparity['vid08'])
-                val_data['rgb'].extend(self.litiv2018.rgb['vid04'])
-                val_data['lwir'].extend(self.litiv2018.lwir['vid04'])
-                val_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid04'])
-                val_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid04'])
-                val_data['disparity'].extend(self.litiv2018.disparity['vid04'])
-                val_data['rgb'].extend(self.litiv2018.rgb['vid07'])
-                val_data['lwir'].extend(self.litiv2018.lwir['vid07'])
-                val_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid07'])
-                val_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid07'])
-                val_data['disparity'].extend(self.litiv2018.disparity['vid07'])
-            elif self.litiv2018.fold == 5:
                 test_data['rgb'].extend(self.litiv2018.rgb['vid04'])
                 test_data['lwir'].extend(self.litiv2018.lwir['vid04'])
                 test_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid04'])
@@ -218,7 +202,7 @@ class LITIV:
                 val_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid08'])
                 val_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid08'])
                 val_data['disparity'].extend(self.litiv2018.disparity['vid08'])
-            elif self.litiv2018.fold == 6:
+            elif self.litiv2018.fold == 5:
                 test_data['rgb'].extend(self.litiv2018.rgb['vid07'])
                 test_data['lwir'].extend(self.litiv2018.lwir['vid07'])
                 test_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid07'])
@@ -234,6 +218,22 @@ class LITIV:
                 val_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid08'])
                 val_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid08'])
                 val_data['disparity'].extend(self.litiv2018.disparity['vid08'])
+            elif self.litiv2018.fold == 6:
+                test_data['rgb'].extend(self.litiv2018.rgb['vid08'])
+                test_data['lwir'].extend(self.litiv2018.lwir['vid08'])
+                test_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid08'])
+                test_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid08'])
+                test_data['disparity'].extend(self.litiv2018.disparity['vid08'])
+                val_data['rgb'].extend(self.litiv2018.rgb['vid04'])
+                val_data['lwir'].extend(self.litiv2018.lwir['vid04'])
+                val_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid04'])
+                val_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid04'])
+                val_data['disparity'].extend(self.litiv2018.disparity['vid04'])
+                val_data['rgb'].extend(self.litiv2018.rgb['vid07'])
+                val_data['lwir'].extend(self.litiv2018.lwir['vid07'])
+                val_data['mask_rgb'].extend(self.litiv2018.mask_rgb['vid07'])
+                val_data['mask_lwir'].extend(self.litiv2018.mask_lwir['vid07'])
+                val_data['disparity'].extend(self.litiv2018.disparity['vid07'])
 
         # shuffle validation data the same way for rgb/lwir/disparity.
         data = list(zip(val_data['rgb'], val_data['lwir'], val_data['mask_rgb'],

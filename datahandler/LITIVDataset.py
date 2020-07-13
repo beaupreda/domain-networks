@@ -102,6 +102,9 @@ class TestLITIVDataset:
         self.patch_lwir = torch.zeros(size=(self.bsize, self.channels, patch_size, range_size), dtype=torch.float32)
         self.targets = torch.zeros(size=(self.bsize, ), dtype=torch.int64)
 
+        self.remainder = self.disparity.shape[0] % self.bsize
+        self.last_batch_idx = self.disparity.shape[0] - self.remainder
+
     def get_batch(self) -> (torch.Tensor, torch.Tensor, torch.Tensor):
         """
         creates testing patches from the dataset.
@@ -109,9 +112,16 @@ class TestLITIVDataset:
         """
         for idx in range(self.bsize):
             i = self.ptr + idx
-            if i > self.disparity.shape[0] - 1:
-                i = 0
-                self.ptr = -idx
+            # last batch is smaller
+            if i == self.last_batch_idx:
+                patch_size = 2 * self.psize
+                range_size = 2 * self.hdisp + patch_size
+                self.patch_rgb = torch.zeros(size=(self.bsize, self.channels, patch_size, patch_size),
+                                             dtype=torch.float32)
+                self.patch_lwir = torch.zeros(size=(self.bsize, self.channels, patch_size, range_size),
+                                              dtype=torch.float32)
+                self.targets = torch.zeros(size=(self.bsize,), dtype=torch.int64)
+
             frame, x, y, dx = self.disparity[i]
 
             rgb = cv2.imread(self.rgb[frame], cv2.IMREAD_COLOR).astype(np.float32)
@@ -125,6 +135,9 @@ class TestLITIVDataset:
             self.patch_lwir[idx] = lwir[:, y - self.psize:y + self.psize,
                                         dx - self.psize - self.hdisp:dx + self.psize + self.hdisp]
             self.targets[idx] = torch.tensor(data=self.hdisp, dtype=torch.int64)
+
+            if i >= self.last_batch_idx and idx == self.remainder - 1:
+                return self.patch_rgb, self.patch_lwir, self.targets
 
         self.ptr += self.bsize
         return self.patch_rgb, self.patch_lwir, self.targets
