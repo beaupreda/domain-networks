@@ -2,6 +2,10 @@
 
 This repository contains all the code to reproduce the experiments made in our paper [Domain Siamese CNNs for Sparse Multispectral Disparity Estimation](https://arxiv.org/pdf/2005.00088.pdf) accepted at ICPR 2020.
 
+This is an overview of our proposed architecture.
+
+![](images/architecture.png)
+
 Here are some examples of the disparity maps with the human silhouettes segmented. The segmentation masks were provided with the dataset.
 
 ![](images/1person.png)
