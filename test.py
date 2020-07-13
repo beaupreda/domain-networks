@@ -38,7 +38,10 @@ def test(model: torch.nn.Module, loader: TestLITIVDataset, name: str, max_disp: 
     with torch.no_grad():
         correct = 0
         for i in range(0, loader.disparity.shape[0], bsize):
-            print(f'\r{i + bsize} / {loader.disparity.shape[0]}', end='', flush=True)
+            if i == loader.last_batch_idx:
+                print(f'\r{i + loader.remainder} / {loader.disparity.shape[0]}', end='', flush=True)
+            else:
+                print(f'\r{i + bsize} / {loader.disparity.shape[0]}', end='', flush=True)
             rgb, lwir, targets = loader.get_batch()
 
             disp = torch.arange(start=0, end=(max_disp + 1), dtype=torch.float32)
@@ -105,14 +108,14 @@ def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--save', default='logs', help='folder to save logs from executions')
-    parser.add_argument('--fold', type=int, default=1, help='which fold to test on (LITIV dataset only)')
-    parser.add_argument('--model', default='concatnet', help='name of the model to train')
+    parser.add_argument('--fold', type=int, default=1, help='which fold to test on')
+    parser.add_argument('--model', default='domainnet', help='name of the model to train')
     parser.add_argument('--datapath', default='/home/beaupreda/litiv/datasets/litiv')
-    parser.add_argument('--loadmodel', default='pretrained/concatnet/fold1.pt',
-                        help='name of the model to load, if any')
+    parser.add_argument('--loadmodel', default='pretrained/domainnet/fold1.pt',
+                        help='name of the trained model to load, if any')
     parser.add_argument('--max_disparity', type=int, default=64, help='maximum disparity in the dataset')
-    parser.add_argument('--patch_size', type=int, default=18, help='half width of the left patch')
-    parser.add_argument('--batch_size', type=int, default=100, help='test batch size')
+    parser.add_argument('--patch_size', type=int, default=18, help='half width of the patch')
+    parser.add_argument('--batch_size', type=int, default=100, help='batch size')
     parser.add_argument('--n', type=int, default=3, help='threshold for the n pixel error function')
     parser.add_argument('--no_cuda', action='store_true', default=False, help='enables/disables GPU')
     args = parser.parse_args()
